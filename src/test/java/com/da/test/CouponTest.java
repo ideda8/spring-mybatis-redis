@@ -6,6 +6,7 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,14 +62,14 @@ public class CouponTest {
         CouponMapper couponMapper = sqlSession.getMapper(CouponMapper.class);
 
         Date date = new Date();
-        int timeOut = 1;
+        int timeOut = 30;
 
         Coupon c = new Coupon();
         c.setName("20元优惠券");
         c.setMoney(20.0);
-        c.setCouponDesc("优惠20元");
-        c.setCreateTime(date);
-        c.setExpireTime(addDate(date, 2, timeOut));
+        c.setCoupon_desc("优惠20元");
+        c.setCreate_time(date);
+        c.setExpire_time(addDate(date, 1, timeOut));
         c.setState(0);
 
         //调用mapper中的方法
@@ -79,7 +80,7 @@ public class CouponTest {
 
         sqlSession.close();
 
-        redisTemplate.opsForValue().set("coupon:" + c.getId(), c.getId()+"" ,timeOut, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set("coupon:" + c.getId(), c.getId()+"" ,timeOut, TimeUnit.SECONDS);
 
     }
 
